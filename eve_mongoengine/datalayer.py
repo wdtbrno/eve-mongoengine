@@ -401,10 +401,13 @@ class MongoengineDataLayer(Mongo):
                 if direction < 0:
                     field = "-%s" % field
                 qry = qry.order_by(field)
-        # apply filters
-        if req.if_modified_since:
-            spec[config.LAST_UPDATED] = \
-                {'$gt': req.if_modified_since}
+        # python-eve since 0.5 disabled If-Modified-Since on resource endpoints
+        # Same functionality is available with
+        # a ?where={"_udpated": {"$gt": "<RFC1123 date>"}} request.
+        ## apply filters
+        # if req.if_modified_since:
+        #     spec[config.LAST_UPDATED] = \
+        #         {'$gt': req.if_modified_since}
         if len(spec) > 0:
             qry = qry.filter(__raw__=spec)
         # apply projection
