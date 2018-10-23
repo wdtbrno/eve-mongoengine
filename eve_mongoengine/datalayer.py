@@ -219,7 +219,10 @@ class MongoengineUpdater(object):
         for db_field, value in iteritems(updates):
             field_name = doc._reverse_db_field_map[db_field]
             field = doc._fields[field_name]
-            doc[field_name] = field.to_python(value)
+            if value is None:
+                doc[field_name] = value
+            else:
+                doc[field_name] = field.to_python(value)
         return doc
 
     def _update_using_save(self, resource, id_, updates):
@@ -330,7 +333,7 @@ class MongoengineDataLayer(Mongo):
         translate = lambda x: model_cls._reverse_db_field_map.get(x)
         projection = [translate(field) for field in projection if
                       field in model_cls._reverse_db_field_map]
-    
+
         if 0 in projection_value:
             qry = qry.exclude(*projection)
         else:
