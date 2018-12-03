@@ -129,7 +129,7 @@ class SchemaMapper(object):
             fdict['nullable'] = True
 
             if isinstance(field, EmbeddedDocumentField):
-                fdict['schema'] = cls.create_schema(field.document_type)
+                fdict['schema'] = cls.create_schema(field.document_type, lowercase)
             if isinstance(field, ListField):
                 fdict['schema'] = cls.process_field(field.field, lowercase)
 
