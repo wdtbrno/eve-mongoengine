@@ -171,8 +171,6 @@ class EveMongoengine(object):
                 'schema', {}
             ).pop('allow_unknown', None)
             self.app.register_resource(resource_name, resource_settings)
-            if allow_unknown:
-                resource_settings['schema']['allow_unknown'] = allow_unknown
             # add sub-resource functionality for every ReferenceField
             subresources = self.schema_mapper_class.get_subresource_settings
             for registration in subresources(model_cls, resource_name,
