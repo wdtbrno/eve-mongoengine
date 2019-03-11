@@ -61,7 +61,7 @@ Dependencies
 - Python 2.7+ or Python 3.3+
 
 - eve>=0.5.3
-- mongoengine>=0.8.7,<=0.9
+- mongoengine>=0.8.7
 - blinker
 
 
