@@ -34,7 +34,7 @@ setup(
     install_requires=[
         'Eve>=0.5.3',
         'Blinker',
-        'Mongoengine>=0.8.7,<=0.9',
+        'Mongoengine>=0.8.7',
     ],
     **extra_opts
 )
