@@ -59,9 +59,9 @@ class EveMongoengineValidator(Validator):
 
         return True
 
-    def _validate_type_dynamic(self, field, value):
+    def _validate_type_dynamic(self, value):
         """
         Dummy validation method just to convince cerberus not to validate that
         value.
         """
-        pass
+        return True
