@@ -400,10 +400,12 @@ class MongoengineDataLayer(Mongo):
             client_sort)
         # apply ordering
         if sort:
+            sort_fields = []
             for field, direction in _itemize(sort):
                 if direction < 0:
                     field = "-%s" % field
-                qry = qry.order_by(field)
+                sort_fields.append(field)
+            qry = qry.order_by(sort_fields)
         # python-eve since 0.5 disabled If-Modified-Since on resource endpoints
         # Same functionality is available with
         # a ?where={"_udpated": {"$gt": "<RFC1123 date>"}} request.
