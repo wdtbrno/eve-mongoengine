@@ -331,8 +331,14 @@ class MongoengineDataLayer(Mongo):
         # We must translate any database field names to their corresponding
         # MongoEngine names before attempting to use them.
         translate = lambda x: model_cls._reverse_db_field_map.get(x)
-        projection = [translate(field) for field in projection if
-                      field in model_cls._reverse_db_field_map]
+
+        projection_copy = projection.copy()
+        projection = []
+        for field in projection_copy:
+            field_copy = field.split(".")
+            field_copy[0] = translate(field_copy[0])
+            if None not in field_copy:
+                projection.append(".".join(field_copy))
 
         if 0 in projection_value:
             qry = qry.exclude(*projection)
