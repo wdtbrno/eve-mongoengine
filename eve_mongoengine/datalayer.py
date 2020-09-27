@@ -61,9 +61,10 @@ def clean_doc(doc):
 
     The purpose of this is to get proper etag.
     """
-    for attr, value in iteritems(dict(doc)):
-        if isinstance(value, (list, dict)) and not value:
-            del doc[attr]
+    # MPI-1220#2
+    # for attr, value in iteritems(dict(doc)):
+    #     if isinstance(value, (list, dict)) and not value:
+    #         del doc[attr]
     doc.pop('_etag', None)
 
     return doc
@@ -75,6 +76,7 @@ class PymongoQuerySet(object):
     with as_pymongo() called, but returning ALL fields in subdocuments
     (which as_pymongo() somehow filters).
     """
+
     def __init__(self, qs):
         self._qs = qs
 
@@ -82,10 +84,12 @@ class PymongoQuerySet(object):
         def iterate(obj):
             qs = object.__getattribute__(obj, '_qs')
             for doc in qs:
-                doc = dict(doc.to_mongo())
-                for attr, value in iteritems(dict(doc)):
-                    if isinstance(value, (list, dict)) and not value:
-                        del doc[attr]
+                # MPI-1220#2
+                # doc = dict(doc.to_mongo())
+                # for attr, value in iteritems(dict(doc)):
+                #     if isinstance(value, (list, dict)) and not value:
+                #         del doc[attr]
+                doc = doc.to_mongo()
                 yield doc
         return iterate(self)
 
