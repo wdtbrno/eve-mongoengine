@@ -277,32 +277,20 @@ class MongoengineDataLayer(Mongo):
         'use_atomic_update_for_patch': True
     }
 
-    def __init__(self, ext):
+    def __init__(self, ext, conn):
         """
         Constructor.
 
         :param ext: instance of :class:`EveMongoengine`.
+        :param ext: instance of :class:`MongoClient`.
         """
-        # get authentication info
-        username = ext.app.config.get('MONGO_USERNAME', None)
-        password = ext.app.config.get('MONGO_PASSWORD', None)
-        auth = (username, password)
-        if any(auth) and not all(auth):
-            raise ConfigException('Must set both USERNAME and PASSWORD '
-                                  'or neither')
-        # try to connect to db
-        self.conn = connect(ext.app.config['MONGO_DBNAME'],
-                            host=ext.app.config['MONGO_HOST'],
-                            port=ext.app.config['MONGO_PORT'])
+        self.conn = conn
         self.models = ext.models
         self.app = ext.app
         # create dummy driver instead of PyMongo, which causes errors
         # when instantiating after config was initialized
         self.driver = type('Driver', (), {})()
         self.driver.db = get_db()
-        # authenticate
-        if any(auth):
-            self.driver.db.authenticate(username, password)
         # helper object for managing PATCHes, which are a bit dirty
         self.updater = MongoengineUpdater(self)
         # map resource -> Mongoengine class

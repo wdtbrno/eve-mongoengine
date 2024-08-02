@@ -84,10 +84,10 @@ class EveMongoengine(object):
     #: subclassed in the future to support new mongoenigne's fields.
     schema_mapper_class = SchemaMapper
 
-    def __init__(self, app=None):
+    def __init__(self, app=None, **kwargs):
         self.models = {}
         if app is not None:
-            self.init_app(app)
+            self.init_app(app, **kwargs)
 
     def _parse_config(self):
         # parse app config
@@ -101,7 +101,7 @@ class EveMongoengine(object):
         except KeyError:
             self.date_created = '_created'
 
-    def init_app(self, app):
+    def init_app(self, app, **kwargs):
         """
         Binds EveMongoengine extension to created eve application.
 
@@ -117,7 +117,7 @@ class EveMongoengine(object):
         app.validator = self.validator_class
         self._parse_config()
         # overwrite default data layer to get proper mongoengine functionality
-        app.data = self.datalayer_class(self)
+        app.data = self.datalayer_class(self, **kwargs)
 
     def _set_default_settings(self, settings):
         """

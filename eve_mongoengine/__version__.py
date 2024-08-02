@@ -3,7 +3,7 @@
 # This file must remain compatible with
 # both Python >= 2.6 and Python 3.3+
 
-VERSION = (0, 1, 2)     # 0.1.2
+VERSION = (0, 1, 3)     # 0.1.3
 
 def get_version():
     if isinstance(VERSION[-1], int):
