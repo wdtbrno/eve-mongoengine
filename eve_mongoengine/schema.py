@@ -160,11 +160,12 @@ class SchemaMapper(object):
                 resource = field.document_type.__name__
                 if lowercase:
                     resource = resource.lower()
-                fdict['data_relation'] = {
-                    'resource': resource,
-                    'field': '_id',
-                    'embeddable': True
-                }
+                # Nechci provazovat na další resource
+                # fdict['data_relation'] = {
+                #     'resource': resource,
+                #     'field': '_id',
+                #     'embeddable': True
+                # }
 
         elif best_matching_cls is DynamicField:
             fdict['type'] = 'dynamic'

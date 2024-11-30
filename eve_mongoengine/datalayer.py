@@ -340,7 +340,7 @@ class MongoengineDataLayer(Mongo):
             qry = qry.only(*projection)
         return qry
 
-    def find(self, resource, req, sub_resource_lookup):
+    def find(self, resource, req, sub_resource_lookup, perform_count):
         """
         Seach for results and return list of them.
 
@@ -368,7 +368,7 @@ class MongoengineDataLayer(Mongo):
 
         if req.where:
             try:
-                spec = self._sanitize(json.loads(req.where))
+                spec = self._sanitize(resource, json.loads(req.where))
             except HTTPException as e:
                 # _sanitize() is raising an HTTP exception; let it fire.
                 raise
@@ -420,7 +420,8 @@ class MongoengineDataLayer(Mongo):
             qry = qry.limit(int(req.max_results))
         if req.page > 1:
             qry = qry.skip((req.page - 1) * req.max_results)
-        return PymongoQuerySet(qry)
+        count = qry._collection.count_documents(spec) if perform_count else None
+        return PymongoQuerySet(qry), count
 
     def find_one(self, resource, req, check_auth_value=True,
                         force_auth_field_projection=False, **lookup):
